@@ -8,3 +8,15 @@ Describe 'Module Manifest Tests' {
     }
 }
 
+Describe 'Module Tests' {
+    It 'check module import' {
+        Import-Module $ModuleManifestPath
+        Get-Module Porgo | Should not BeNullOrEmpty
+    }
+    It 'check organize with date' {
+        Import-Module $ModuleManifestPath
+        group-withdate -source 'C:\Users\Manana\Desktop\dump'
+        ls | Should not BeNullOrEmpty
+    }
+}
+
