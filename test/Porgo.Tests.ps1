@@ -13,9 +13,14 @@ Describe 'Module Tests' {
         Import-Module $ModuleManifestPath
         Get-Module Porgo | Should not BeNullOrEmpty
     }
+        It 'check Error handling of invalid path' {
+        Import-Module $ModuleManifestPath
+        group-filedate -source 'C:\Users\Manana\Desktop\dumpxxx' -destination 'C:\Users\Manana\Desktop\dumper' | 
+        Should be 'Check whether the source path is a valid directory'
+    }
     It 'check organize with date' {
         Import-Module $ModuleManifestPath
-        group-withdate -source 'C:\Users\Manana\Desktop\dump'
+        group-filedate -source 'C:\Users\Manana\Desktop\dump' -destination 'C:\Users\Manana\Desktop\dumper'
         ls | Should not BeNullOrEmpty
     }
 }

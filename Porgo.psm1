@@ -10,56 +10,62 @@
 .EXAMPLE
    Another example of how to use this cmdlet
 #>
-function group-withDate
+function group-FileDate
 {
     [CmdletBinding()]
-    [Alias()]
-    [OutputType([int])]
     Param
     (
         # source folder path
         [Parameter(Mandatory=$true,
                    ValueFromPipelineByPropertyName=$true,
                    Position=0)]
-        $source
+        $source,
+        # destination folder path
+        [Parameter(Position=1)]
+        $destination
     )
 
-$test=test-path $source
-If ($test -eq  $false)
+
+If (-not (test-path $source -PathType Container))
 {
-write-output "The folder does not exist"
+write-output "Check whether the source path is a valid directory"
  
  }
  
  else
 {
+    if(!$destination){
+        $destination = $source
+    }else{
+        if(-not (test-path $destination)){
+            New-Item -Path $destination -Type Directory
+        }
+    }
 $files = Get-ChildItem $source
 
-foreach ($x in $files) {
+foreach ($file in $files) {
  
 
 
-$datestr= $x.lastwritetime.toshortdatestring().replace("/","-")
-$folder=$source +"\"+ $datestr 
-$fullpath=$source +"\"+ $datestr +"\"+ $X.name
+$datestr= $file.lastwritetime.toshortdatestring().replace("/","-")
+$folder=join-path -path $destination -ChildPath $datestr 
+$fullpath=$folder +"\"+ $file.name
 
 $fullpath
-if(test-path ($folder) -pathtype container)
-{
-$x.moveto($fullpath)
-}
-else
+if(-not (test-path ($folder) -pathtype container))
 {
 New-Item $folder -type directory
-$x.moveto($fullpath)
-
 }
-
+$file.moveto($fullpath)
  }
  
  }
 
     }
+
+
+
+
 
 
 # Export only the functions using PowerShell standard verb-noun naming.
