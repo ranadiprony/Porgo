@@ -21,7 +21,7 @@ Describe 'Module Tests' {
     It 'check organize with date' {
         Import-Module $ModuleManifestPath
         group-filedate -source 'C:\Users\Manana\Desktop\dump' -destination 'C:\Users\Manana\Desktop\dumper'
-        ls | Should not BeNullOrEmpty
+        Get-ChildItem 'C:\Users\Manana\Desktop\dumper' | Should not BeNullOrEmpty
     }
 }
 
